@@ -1,6 +1,7 @@
 package com.example.myapplication;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,6 +10,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.myapplication.Database.SqlHelper;
 
 public class MainActivity extends AppCompatActivity {
 Button login;
@@ -22,7 +25,7 @@ TextView register,logo;
         //gaurav
         //saurabh
         idsetter();
-        data();
+
         listner();
         fontSetter();
         hideActiionBar();
@@ -38,9 +41,44 @@ TextView register,logo;
         logo.setTypeface(custom_font);
     }
 
-    private void data() {
-        uname="gaurav";
-        password="gaurav";
+    public boolean data(String email,String password) {
+        //StringBuffer arr[]=new StringBuffer[];
+        StringBuffer sb=new StringBuffer();
+        boolean check=false;
+
+        SqlHelper db=new SqlHelper(this);
+        Cursor cursor=db.showAllData();
+
+        if(cursor.getCount()==0)
+        {
+
+            Toast.makeText(this, "enter valid Email/password ", Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+            String array[]=new String[cursor.getCount()];
+            int i=0;
+            while(cursor.moveToNext())
+            {
+                String str="";
+                str=str+cursor.getString(0)+":"+cursor.getString(1)+":"+cursor.getString(2);
+                array[i]=str;
+
+            }
+            for(int j=0;j<array.length;++j)
+            {
+                String arr[]=array[i].split(":");
+                if(email.equals(arr[2])&&password.equals(arr[1]))
+                {
+                  check=true;
+                }
+
+
+            }
+
+
+        }
+        return check;
     }
 
     private void idsetter() {
@@ -56,21 +94,24 @@ TextView register,logo;
             @Override
             public void onClick(View view) {
 //                Intent i=new Intent(MainActivity.this);
-                if(user.getText().toString().equals(uname))
+                if(!user.getText().toString().isEmpty())
                 {
-                    if(pass.getText().toString().equals(password))
+                    if(!pass.getText().toString().isEmpty())
                     {
-                        Intent i=new Intent(MainActivity.this,ListDataView.class);
-                        startActivity(i);
+                       if( data(user.getText().toString(),pass.getText().toString()))
+                       {
+                           Intent i=new Intent(MainActivity.this,ListDataView.class);
+                           startActivity(i);
+                       }
                     }
                     else
                     {
-                        pass.setError("enter correct password");
+                        pass.setError("please enter password");
                     }
                 }
                 else
                 {
-                    user.setError("please enter correct username");
+                    user.setError("please enter email");
                 }
 
             }
