@@ -4,22 +4,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    tools:context=".Registration"
     android:orientation="vertical"
-    android:weightSum="10"
     android:background="#E43F3F"
-    tools:context=".MainActivity">
-<View
-    android:layout_width="match_parent"
-    android:layout_height="0dp"
-    android:layout_weight="1"
-    />
+    android:weightSum="10">
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.5"
+        />
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="2"
         android:text="Famous"
         android:textColor="#ffffff"
-        android:id="@+id/textview_logo"
+        android:id="@+id/textview_register_logo"
         android:gravity="center"
         android:textSize="36dp"
         android:backgroundTint="#ffffff"
@@ -30,15 +31,35 @@
         android:layout_weight="1"
         android:outlineProvider="none"
         android:layout_marginRight="25dp"
-
         android:textColor="#ffffff"
         android:layout_marginLeft="25dp"
         android:textSize="12dp"
         android:textColorHint="#ffffff"
         android:hint="UserName"
         android:backgroundTint="#ffffff"
-        android:id="@+id/edittext_username"
+        android:id="@+id/edittext_register_username"
         android:gravity="center"
+        />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.5"
+        />
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:hint="Email"
+        android:outlineProvider="none"
+        android:textColorHint="#ffffff"
+        android:backgroundTint="#ffffff"
+        android:id="@+id/edittext_register_email"
+        android:inputType="textEmailAddress"
+        android:textColor="#ffffff"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:gravity="center"
+        android:textSize="12dp"
         />
     <View
         android:layout_width="match_parent"
@@ -55,46 +76,47 @@
         android:outlineProvider="none"
         android:textColorHint="#ffffff"
         android:backgroundTint="#ffffff"
-        android:id="@+id/edittext_password"
+        android:id="@+id/edittext_register_password"
+        android:inputType="textPassword"
         android:textColor="#ffffff"
         android:layout_marginLeft="25dp"
         android:layout_marginRight="25dp"
         android:gravity="center"
         android:textSize="12dp"
         />
-
     <View
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="0.75"
         />
-
-<Button
-    android:layout_width="match_parent"
-    android:layout_height="0dp"
-    android:layout_weight="0.75"
-    android:text="Login"
-    android:textSize="16dp"
-    android:textColor="#ffffff"
-    android:layout_marginRight="25dp"
-    android:layout_marginLeft="25dp"
-    android:background="#CC1D1D"
-    android:id="@+id/button_login"
-    />
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.75"
+        android:textSize="16dp"
+        android:textColor="#ffffff"
+        android:layout_marginRight="25dp"
+        android:layout_marginLeft="25dp"
+        android:background="#CC1D1D"
+        android:id="@+id/button_reg"
+        android:text="Register"
+        />
     <View
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.5"
+        android:layout_weight="0.2"
         />
-<TextView
-    android:layout_width="match_parent"
-    android:layout_height="0dp"
-    android:layout_weight="1"
-    android:text="No account yet ? Create One"
-    android:gravity="center"
-    android:id="@+id/TextView_register"
-    android:clickable="true"
-    android:textColor="#ffffff"
-    android:textColorHint="#ffffff"
-    />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:text="Already a member? Login"
+        android:gravity="center"
+        android:id="@+id/TextView_login"
+        android:clickable="true"
+        android:textColor="#ffffff"
+        android:textColorHint="#ffffff"
+        />
+
+
 </LinearLayout>
