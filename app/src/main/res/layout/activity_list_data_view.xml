@@ -5,18 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ListData.ListDataView">
-<TextView
-    android:layout_width="match_parent"
-    android:layout_height="100dp"
-    android:text="gaurav"
-    android:gravity="center"
-    android:id="@+id/tv_list_data"
-    />
 
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/list_data_recycleview"
+        android:paddingLeft="25dp"
+        android:paddingRight="25dp"
+
         ></android.support.v7.widget.RecyclerView>
     
 </LinearLayout>

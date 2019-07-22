@@ -3,6 +3,9 @@ package com.example.myapplication.ListData;
 import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.widget.TextView;
 
 import com.example.myapplication.Database.SqlHelper;
@@ -11,8 +14,11 @@ import com.example.myapplication.R;
 import java.util.ArrayList;
 
 public class ListDataView extends AppCompatActivity {
-TextView tv;
+//TextView tv;
 ArrayList<ArrayListLoad> ar=new ArrayList<ArrayListLoad>();
+RecyclerView recyclerView;
+RecyclerView.LayoutManager layoutManager;
+RecyclerView.Adapter  adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,10 +26,12 @@ ArrayList<ArrayListLoad> ar=new ArrayList<ArrayListLoad>();
         setContentView(R.layout.activity_list_data_view);
         idsetter();
         loaddata();
+        recycleViewLoadData();
     }
 
     private void idsetter() {
-        tv=findViewById(R.id.tv_list_data);
+//        tv=findViewById(R.id.tv_list_data);
+        recyclerView=findViewById(R.id.list_data_recycleview);
     }
 
     private void loaddata() {
@@ -43,7 +51,16 @@ ArrayList<ArrayListLoad> ar=new ArrayList<ArrayListLoad>();
         }
         if(!sf.toString().isEmpty())
         {
-            tv.setText(sf.toString());
+//            tv.setText(sf.toString());
         }
+    }
+
+    private void recycleViewLoadData() {
+        layoutManager= new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setHasFixedSize(true);
+        adapter=new RecycleViewAdapter(this,ar);
+        adapter.notifyDataSetChanged();
+        recyclerView.setAdapter(adapter);
     }
 }
