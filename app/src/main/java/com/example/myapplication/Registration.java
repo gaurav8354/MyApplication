@@ -36,7 +36,7 @@ EditText username,pass,email;
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i=new Intent(Registration.this,MainActivity.class);
+                Intent i=new Intent(Registration.this, Login.class);
                 startActivity(i);
             }
         });
@@ -61,7 +61,7 @@ EditText username,pass,email;
                 }
                 if(check)
                 {
-                    if(insertSql(email.getText().toString(),pass.getText().toString(),username.getText().toString(),1)){
+                    if(insertSql(email.getText().toString(),pass.getText().toString(),username.getText().toString())){
                         Toast.makeText(Registration.this, "Registration Done", Toast.LENGTH_SHORT).show();
                     }
                     else{
@@ -91,9 +91,9 @@ EditText username,pass,email;
     boolean isEmailValid(CharSequence email) {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
-    private boolean insertSql(String email,String pass,String name,int no){
+    private boolean insertSql(String email,String pass,String name){
 
         SqlHelper database=new SqlHelper(this);
-        return  database.insertData(name,email,pass,no);
+        return  database.insertData(name,email,pass);
     }
 }

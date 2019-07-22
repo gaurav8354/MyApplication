@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -12,75 +13,69 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.myapplication.Database.SqlHelper;
+import com.example.myapplication.ListData.ArrayListLoad;
+import com.example.myapplication.ListData.ListDataView;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.ArrayList;
+
+public class Login extends AppCompatActivity {
 Button login;
 String uname,password;
 EditText user,pass;
 TextView register,logo;
+
+    ArrayList<ArrayListLoad> ar=new ArrayList<ArrayListLoad>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //gaurav
-        //saurabh
         idsetter();
-
         listner();
         fontSetter();
         hideActiionBar();
     }
-
     private void hideActiionBar() {
         getSupportActionBar().hide();
     }
-
     private void fontSetter() {
         Typeface custom_font = Typeface.createFromAsset(getAssets(),  "fonts/cursive.ttf");
-
         logo.setTypeface(custom_font);
     }
-
     public boolean data(String email,String password) {
-        //StringBuffer arr[]=new StringBuffer[];
         StringBuffer sb=new StringBuffer();
         boolean check=false;
-
         SqlHelper db=new SqlHelper(this);
         Cursor cursor=db.showAllData();
-
         if(cursor.getCount()==0)
         {
-
             Toast.makeText(this, "enter valid Email/password ", Toast.LENGTH_SHORT).show();
         }
         else
         {
-            String array[]=new String[cursor.getCount()];
+           // String array[]=new String[cursor.getCount()];
             int i=0;
             while(cursor.moveToNext())
             {
+
+                ar.add(new ArrayListLoad(cursor.getString(0),cursor.getString(2),cursor.getString(1),cursor.getString(3)));
                 String str="";
                 str=str+cursor.getString(0)+":"+cursor.getString(1)+":"+cursor.getString(2);
-                array[i]=str;
+               // array[i]=str;
 
             }
-            for(int j=0;j<array.length;++j)
+
+            for(int j=0;j<ar.size();++j)
             {
-                String arr[]=array[i].split(":");
-                if(email.equals(arr[2])&&password.equals(arr[1]))
+                if(ar.get(j).email.equals(email)&&ar.get(j).password.equals(password))
                 {
-                  check=true;
+                    check=true;
+                    break;
                 }
-
-
+                Log.d("1234",ar.get(j).name+":"+ar.get(j).email+":"+ar.get(j).password+":"+ar.get(j).no);
             }
-
-
         }
         return check;
     }
-
     private void idsetter() {
         login=findViewById(R.id.button_login);
         user=findViewById(R.id.edittext_username);
@@ -93,15 +88,18 @@ TextView register,logo;
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Intent i=new Intent(MainActivity.this);
+//                Intent i=new Intent(Login.this);
                 if(!user.getText().toString().isEmpty())
                 {
                     if(!pass.getText().toString().isEmpty())
                     {
                        if( data(user.getText().toString(),pass.getText().toString()))
                        {
-                           Intent i=new Intent(MainActivity.this,ListDataView.class);
+                           Intent i=new Intent(Login.this, ListDataView.class);
                            startActivity(i);
+                       }
+                       else{
+                           Toast.makeText(Login.this, "enter valid Email/password", Toast.LENGTH_SHORT).show();
                        }
                     }
                     else
@@ -119,7 +117,7 @@ TextView register,logo;
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i=new Intent(MainActivity.this,Registration.class);
+                Intent i=new Intent(Login.this,Registration.class);
                 startActivity(i);
             }
         });

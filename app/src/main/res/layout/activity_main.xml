@@ -7,7 +7,7 @@
     android:orientation="vertical"
     android:weightSum="10"
     android:background="#E43F3F"
-    tools:context=".MainActivity">
+    tools:context=".Login">
 <View
     android:layout_width="match_parent"
     android:layout_height="0dp"
