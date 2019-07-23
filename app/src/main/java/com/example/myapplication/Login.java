@@ -95,8 +95,12 @@ TextView register,logo;
                     {
                        if( data(user.getText().toString(),pass.getText().toString()))
                        {
-                           Intent i=new Intent(Login.this, ListDataView.class);
+//                           Intent i=new Intent(Login.this, ListDataView.class);
+//                           startActivity(i);
+
+                           Intent i=new Intent(Login.this,JsonDataMenu.class);
                            startActivity(i);
+
                        }
                        else{
                            Toast.makeText(Login.this, "enter valid Email/password", Toast.LENGTH_SHORT).show();

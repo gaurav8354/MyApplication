@@ -5,10 +5,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.TextView;
 
 import com.example.myapplication.Database.SqlHelper;
+import com.example.myapplication.Json.JsonData;
 import com.example.myapplication.R;
 
 import java.util.ArrayList;
@@ -27,6 +29,7 @@ RecyclerView.Adapter  adapter;
         idsetter();
         loaddata();
         recycleViewLoadData();
+        Log.d("1234", JsonData.jsonString);
     }
 
     private void idsetter() {
