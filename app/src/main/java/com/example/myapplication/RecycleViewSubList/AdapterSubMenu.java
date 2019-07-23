@@ -46,7 +46,7 @@ public class AdapterSubMenu extends RecyclerView.Adapter<ViewHolderSubMenu> {
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(cxt, position+"", Toast.LENGTH_SHORT).show();
+               // Toast.makeText(cxt, position+"", Toast.LENGTH_SHORT).show();
                 Intent i=new Intent(cxt, FinalDataRecycleView.class);
                 i.putExtra("name",ar.get(position).getName());
                 i.putExtra("dis",ar.get(position).getDescription());

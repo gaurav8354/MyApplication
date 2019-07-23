@@ -63,7 +63,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="#000000"
-            android:textSize="24dp"
+            android:textSize="21dp"
             android:id="@+id/tv_final_discription"
             android:padding="11dp"
             android:layout_margin="7dp"

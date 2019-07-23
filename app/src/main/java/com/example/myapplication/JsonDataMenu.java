@@ -1,6 +1,8 @@
 package com.example.myapplication;
 
 import android.app.ProgressDialog;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,7 +21,11 @@ import com.example.myapplication.R;
 import com.example.myapplication.RecycleViewSubList.AdapterSubMenu;
 
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,9 +38,13 @@ import java.util.List;
 
 public class JsonDataMenu extends AppCompatActivity {
 
+    Handler h=new Handler();
+     Runnable runnable;
     ArrayList<PojoJson> arrayList= new ArrayList<PojoJson>();
+    boolean vollyresponsecheck=false;
     public RequestQueue requestQueue;
     ProgressDialog progress;
+    String rp="";
     JSONArray jsonArray;
     RecyclerView recyclerView;
     RecyclerView.Adapter adapter;
@@ -44,10 +54,17 @@ public class JsonDataMenu extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_json_data_menu);
         actionbarhider();
+        changeStatusBarColor("#FFFFFF");
+        status_icon_color();
         idSetter();
+        progress=new ProgressDialog(this);
+        progress.setTitle("Loading..");
+        progress.show();
         requestQueue= Volley.newRequestQueue(this);
+
         parseJson();
-        delay5();
+
+
     }
 
     private void actionbarhider() {
@@ -60,9 +77,16 @@ public class JsonDataMenu extends AppCompatActivity {
             @Override
             public void onResponse(JSONObject response) {
 
-                Log.d("json",response.toString());
+                Log.d("jsonzzzz",response.toString());
+
+
+
+              //  Toast.makeText(JsonDataMenu.this, "zz", Toast.LENGTH_SHORT).show();
+
                 try {
                      jsonArray=response.getJSONArray("jsondata");
+                     JSONObject tmp=jsonArray.getJSONObject(0);
+                     rp=tmp.getString("description");
 
                    // Log.d("array",jsonArray.length()+"");
                     for(int i=0;i<jsonArray.length();++i)
@@ -82,6 +106,8 @@ public class JsonDataMenu extends AppCompatActivity {
                     }
                    // Log.d("jsondata",obj.getString("plantId"));
                    // test();
+                    dly();
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -96,6 +122,21 @@ public class JsonDataMenu extends AppCompatActivity {
         requestQueue.add(jsonObjectRequest);
     }
 
+    private void dly() {
+
+
+        new Handler().postDelayed(new Runnable(){
+            @Override
+            public void run() {
+                /* Create an Intent that will start the Menu-Activity. */
+                progress.cancel();
+
+                test();
+
+
+            }
+        }, 1000);
+    }
 
 
     private void test() {
@@ -114,24 +155,34 @@ public class JsonDataMenu extends AppCompatActivity {
 
     }
 
-    private void delay5() {
 
-progress=new ProgressDialog(this);
-progress.setTitle("Loading..");
-        progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-progress.show();
-        new Handler().postDelayed(new Runnable(){
-            @Override
-            public void run() {
-                /* Create an Intent that will start the Menu-Activity. */
 
-             progress.cancel();
-                test();
+    private void chk(boolean vollyresponsecheck) {
+        h.removeCallbacks(runnable);
+    }
+    private void changeStatusBarColor(String color) {
+        if (Build.VERSION.SDK_INT >= 21) {
+            Window window = getWindow();
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(Color.parseColor(color));
+        }
+    }
+    void status_icon_color(){
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            View decor = getWindow().getDecorView();
+            if (true) {
+                decor.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+            } else {
+                // We want to change tint color to white again.
+                // You can also record the flags in advance so that you can turn UI back completely if
+                // you have set other flags before, such as translucent or full screen.
+                decor.setSystemUiVisibility(0);
             }
-        }, 3000);
-        //...
-
-
+        }
 
     }
+
+
 }
