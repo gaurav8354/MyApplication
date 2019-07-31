@@ -116,7 +116,7 @@ public class JsonDataMenu extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.d("1111json",error.getMessage());
+                Log.d("json",error.getMessage());
             }
         });
         requestQueue.add(jsonObjectRequest);

@@ -29,7 +29,8 @@ sqLiteDatabase.execSQL(sql_create_table);
 sqLiteDatabase.execSQL("DROP TABLE IF EXISTS "+DB_COLUMN);
         //String sql_create_table= "CREATE TABLE \"Register\" (\"Name\"TEXT,\"Password\" TEXT,\"Email\" TEXT PRIMARY KEY AUTOINCREMENT);";
         String sql_create_table= "CREATE TABLE \"Register\" ( \"Name\" TEXT, \"Password\" TEXT, \"Email\"\tTEXT, \"No\" INTEGER PRIMARY KEY AUTOINCREMENT);";
-          sqLiteDatabase.execSQL(sql_create_table);
+
+        sqLiteDatabase.execSQL(sql_create_table);
     }
    public boolean insertData(String name,String email,String password){
         SQLiteDatabase db=this.getWritableDatabase();

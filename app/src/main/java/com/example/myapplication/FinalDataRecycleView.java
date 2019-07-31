@@ -1,23 +1,28 @@
 package com.example.myapplication;
 
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
 public class FinalDataRecycleView extends AppCompatActivity {
     Intent i;
     TextView tv_dis, tv_grow, tv_water, tv_id, tv_name;
-    ImageView imageView;
+    ImageView imageView,iv_star_blank;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +34,57 @@ public class FinalDataRecycleView extends AppCompatActivity {
         i = getIntent();
         idsetter();
         setData();
+        markImportantSata();
 
+    }
+
+    private void markImportantSata() {
+        iv_star_blank.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (iv_star_blank.getDrawable().getConstantState()==getResources().getDrawable(R.drawable.star_blank).getConstantState())
+                {
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        iv_star_blank.setImageDrawable(getDrawable(R.drawable.star_marked));
+//                        Toast toast=new Toast(getApplicationContext());
+                        Toast toast = Toast.makeText(getApplicationContext(),"Added to favourite",1000);
+//                        toast.setText("Added to favourite");
+                        LayoutInflater layoutInflater=getLayoutInflater();
+                        View toastview= (View) layoutInflater.inflate(R.layout.toast, (ViewGroup) findViewById(R.id.custom_layout));
+                         TextView tv=  toastview.findViewById(R.id.tv_toast);
+                        tv.setText("Added to favourite");
+
+                        ImageView ivEmoji=toastview.findViewById(R.id.iv_toast_emoji);
+                        ImageView ivStar=toastview.findViewById(R.id.iv_toast);
+                        ivEmoji.setImageDrawable(getDrawable(R.drawable.smilepng));
+                        ivStar.setImageDrawable(getDrawable(R.drawable.star_marked));
+                        toast.setView(toastview);
+                        toast.show();
+                    }
+                }
+                else
+                {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        iv_star_blank.setImageDrawable(getDrawable(R.drawable.star_blank));
+//                        Toast.makeText(FinalDataRecycleView.this, "Remove from favourite", Toast.LENGTH_SHORT).show();
+                        Toast toast = Toast.makeText(getApplicationContext(),"Removed1 from favourite",1000);
+                        LayoutInflater layoutInflater=getLayoutInflater();
+                        View toastview= (View) layoutInflater.inflate(R.layout.toast, (ViewGroup) findViewById(R.id.custom_layout));
+                        TextView tv=  toastview.findViewById(R.id.tv_toast);
+                        tv.setText("Removed from favourite");
+                        ImageView ivEmoji=toastview.findViewById(R.id.iv_toast_emoji);
+                        ImageView ivStar=toastview.findViewById(R.id.iv_toast);
+                        ivEmoji.setImageDrawable(getDrawable(R.drawable.sad));
+                        ivStar.setImageDrawable(getDrawable(R.drawable.star_blank));
+//                        toast.setText("Added to favourite");
+                        toast.setView(toastview);
+                        toast.show();
+
+                    }
+                }
+            }
+        });
     }
 
     private void idsetter() {
@@ -38,11 +93,10 @@ public class FinalDataRecycleView extends AppCompatActivity {
         tv_grow = findViewById(R.id.tv_growzonenumber);
         tv_name = findViewById(R.id.tv_final_name);
         tv_water = findViewById(R.id.tv_wateringInterval);
+        iv_star_blank=findViewById(R.id.iv_star_blank);
         getSupportActionBar().setTitle(i.getStringExtra("name"));
 
-
     }
-
     private void setData() {
         //tv_dis.setText(i.getStringExtra("dis"));
         String str = i.getStringExtra("dis");
