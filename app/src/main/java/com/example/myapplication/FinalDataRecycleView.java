@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.myapplication.Database.SqlHelper;
 
 public class FinalDataRecycleView extends AppCompatActivity {
     Intent i;
@@ -28,13 +29,27 @@ public class FinalDataRecycleView extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_final_data_recycle_view);
+
         getSupportActionBar().hide();
         changeStatusBarColor("#FFFFFF");
         status_icon_color();
+
         i = getIntent();
         idsetter();
+        favDataCheck();
         setData();
         markImportantSata();
+
+    }
+
+    private void favDataCheck() {
+        SqlHelper sqlHelper=new SqlHelper(getApplicationContext());
+        if(sqlHelper.favExist(i.getStringExtra("id")))
+        {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                iv_star_blank.setImageDrawable(getDrawable(R.drawable.star_marked));
+            }
+        }
 
     }
 
@@ -49,18 +64,32 @@ public class FinalDataRecycleView extends AppCompatActivity {
                         iv_star_blank.setImageDrawable(getDrawable(R.drawable.star_marked));
 //                        Toast toast=new Toast(getApplicationContext());
                         Toast toast = Toast.makeText(getApplicationContext(),"Added to favourite",1000);
-//                        toast.setText("Added to favourite");
-                        LayoutInflater layoutInflater=getLayoutInflater();
-                        View toastview= (View) layoutInflater.inflate(R.layout.toast, (ViewGroup) findViewById(R.id.custom_layout));
-                         TextView tv=  toastview.findViewById(R.id.tv_toast);
-                        tv.setText("Added to favourite");
-
-                        ImageView ivEmoji=toastview.findViewById(R.id.iv_toast_emoji);
-                        ImageView ivStar=toastview.findViewById(R.id.iv_toast);
-                        ivEmoji.setImageDrawable(getDrawable(R.drawable.smilepng));
-                        ivStar.setImageDrawable(getDrawable(R.drawable.star_marked));
-                        toast.setView(toastview);
-                        toast.show();
+                        String name,pid,disc,imageurl;
+                        int gnum,wnum;
+                        name=i.getStringExtra("name");
+                        pid=i.getStringExtra("id");
+                        disc=i.getStringExtra("dis");
+                        imageurl=i.getStringExtra("image");
+                        gnum=i.getIntExtra("g",0);
+                        wnum=i.getIntExtra("w",0);
+                       if( insertDataToFav(name,pid,disc,imageurl,gnum,wnum)){
+                           toast.setText("Added to favourite");
+                           LayoutInflater layoutInflater=getLayoutInflater();
+                           View toastview= (View) layoutInflater.inflate(R.layout.toast, (ViewGroup) findViewById(R.id.custom_layout));
+                           TextView tv=  toastview.findViewById(R.id.tv_toast);
+                           tv.setText("Added to favourite");
+                           ImageView ivEmoji=toastview.findViewById(R.id.iv_toast_emoji);
+                           ImageView ivStar=toastview.findViewById(R.id.iv_toast);
+                           ivEmoji.setImageDrawable(getDrawable(R.drawable.smilepng));
+                           ivStar.setImageDrawable(getDrawable(R.drawable.star_marked));
+                           toast.setView(toastview);
+                           toast.show();
+                       }
+                        else
+                        {
+                            Toast.makeText(FinalDataRecycleView.this, "Something wrong with database", Toast.LENGTH_SHORT).show();
+                        }
+//
                     }
                 }
                 else
@@ -73,6 +102,10 @@ public class FinalDataRecycleView extends AppCompatActivity {
                         View toastview= (View) layoutInflater.inflate(R.layout.toast, (ViewGroup) findViewById(R.id.custom_layout));
                         TextView tv=  toastview.findViewById(R.id.tv_toast);
                         tv.setText("Removed from favourite");
+                        SqlHelper sqlHelper=new SqlHelper(getApplicationContext());
+                        String pid;
+                        pid=i.getStringExtra("id");
+                        sqlHelper.removeFromFav(pid);
                         ImageView ivEmoji=toastview.findViewById(R.id.iv_toast_emoji);
                         ImageView ivStar=toastview.findViewById(R.id.iv_toast);
                         ivEmoji.setImageDrawable(getDrawable(R.drawable.sad));
@@ -85,6 +118,11 @@ public class FinalDataRecycleView extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private boolean insertDataToFav(String name, String pid, String disc, String imageurl, int gnum, int wnum) {
+        SqlHelper sqlHelper=new SqlHelper(this);
+       return sqlHelper.insertFavData(pid,name,disc,imageurl,gnum,wnum);
     }
 
     private void idsetter() {

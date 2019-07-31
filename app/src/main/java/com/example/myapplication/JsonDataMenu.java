@@ -1,6 +1,7 @@
 package com.example.myapplication;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Handler;
@@ -21,6 +22,9 @@ import com.example.myapplication.R;
 import com.example.myapplication.RecycleViewSubList.AdapterSubMenu;
 
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -53,7 +57,7 @@ public class JsonDataMenu extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_json_data_menu);
-        actionbarhider();
+//        actionbarhider();
         changeStatusBarColor("#FFFFFF");
         status_icon_color();
         idSetter();
@@ -182,6 +186,25 @@ public class JsonDataMenu extends AppCompatActivity {
             }
         }
 
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.action_view_fav:
+                Toast.makeText(this, "clicked", Toast.LENGTH_SHORT).show();
+                Intent i=new Intent(JsonDataMenu.this,favouriteActivity.class);
+                startActivity(i);
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return true;
     }
 
 
