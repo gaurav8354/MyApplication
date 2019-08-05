@@ -14,7 +14,6 @@ public class SqlHelper extends SQLiteOpenHelper {
     public static final String DB_NAME_NAME="Name";
     public static final String DB_EMAIL="Email";
     public static final String DB_PASSWORD="Password";
-
     public SqlHelper(@Nullable Context context) {
         super(context, DB_NAME, null, 1);
         SQLiteDatabase db=this.getWritableDatabase();

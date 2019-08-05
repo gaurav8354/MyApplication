@@ -1,13 +1,23 @@
 package com.example.myapplication;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Build;
+import android.os.StrictMode;
+import android.support.annotation.RequiresApi;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,18 +28,32 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.FutureTarget;
 import com.example.myapplication.Database.SqlHelper;
+import com.example.myapplication.Notification.NotificationChannelManager;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.concurrent.ExecutionException;
 
 public class FinalDataRecycleView extends AppCompatActivity {
     Intent i;
     TextView tv_dis, tv_grow, tv_water, tv_id, tv_name;
     ImageView imageView,iv_star_blank;
+    String name,pid,disc,imageurl;
+    int gnum,wnum;
+    Bitmap bitmap1;
 
+    NotificationManagerCompat notificationCompat;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_final_data_recycle_view);
 
+        notificationCompat=NotificationManagerCompat.from(this);
+    Log.d("1234","oncreate called ");
         getSupportActionBar().hide();
         changeStatusBarColor("#FFFFFF");
         status_icon_color();
@@ -64,8 +88,7 @@ public class FinalDataRecycleView extends AppCompatActivity {
                         iv_star_blank.setImageDrawable(getDrawable(R.drawable.star_marked));
 //                        Toast toast=new Toast(getApplicationContext());
                         Toast toast = Toast.makeText(getApplicationContext(),"Added to favourite",1000);
-                        String name,pid,disc,imageurl;
-                        int gnum,wnum;
+
                         name=i.getStringExtra("name");
                         pid=i.getStringExtra("id");
                         disc=i.getStringExtra("dis");
@@ -84,6 +107,7 @@ public class FinalDataRecycleView extends AppCompatActivity {
                            ivStar.setImageDrawable(getDrawable(R.drawable.star_marked));
                            toast.setView(toastview);
                            toast.show();
+                           showNotification(i.getStringExtra("name"),i.getStringExtra("dis").substring(0,50),i.getStringExtra("image"));
                        }
                         else
                         {
@@ -172,5 +196,75 @@ public class FinalDataRecycleView extends AppCompatActivity {
         }
 
     }
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+    private void showNotification(String discription, String msg, String img) {
+//        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+           // Bitmap bitmap= BitmapFactory.decodeResource(getResources(),R.drawable.pug);
+//            Intent resultIntent =new Intent(this,NotificationMessage.class);
+//            resultIntent.putExtra("title",msg);
+//            resultIntent.putExtra("d",discription);
+//            resultIntent.putExtra("image",R.drawable.pug);
+//            TaskStackBuilder stackBuilder=TaskStackBuilder.create(this);
+//            stackBuilder.addNextIntentWithParentStack(resultIntent);
+//            PendingIntent pendingIntent=stackBuilder.getPendingIntent(0,PendingIntent.FLAG_UPDATE_CURRENT);
+
+
+//            NotificationManager notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+//            FutureTarget futureTarget = Glide.with(this)
+//                    .asBitmap()
+//                    .load(img)
+//                    .submit();
+//
+//            try {
+//              //  bitmap1 =  futureTarget.;
+//            } catch (ExecutionException e) {
+//                e.printStackTrace();
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+        Bitmap theBitmap=getBitmapFromURL(img);
+        Intent resultIntent =new Intent(this,FinalDataRecycleView.class);
+        resultIntent.putExtra("name",name);
+        resultIntent.putExtra("dis",disc);
+        resultIntent.putExtra("image",imageurl);
+        resultIntent.putExtra("id",pid);
+        resultIntent.putExtra("w",wnum);
+        resultIntent.putExtra("g",gnum);
+        TaskStackBuilder stackBuilder=TaskStackBuilder.create(this);
+        stackBuilder.addNextIntentWithParentStack(resultIntent);
+        PendingIntent pendingIntent=stackBuilder.getPendingIntent(0,PendingIntent.FLAG_UPDATE_CURRENT);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, NotificationChannelManager.CHANNEL_1)
+                    .setAutoCancel(true).setStyle(new NotificationCompat.BigPictureStyle().bigPicture(theBitmap).setSummaryText(""))
+                    .setContentTitle(msg).setSmallIcon(R.drawable.smilepng).setContentIntent(pendingIntent)
+                    .setContentText(discription).setColor(Color.BLACK)
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+                    notificationCompat.notify(2,builder.build());
+                    Log.d("1234","called notification");
+
+        }
+
+    //private Bitmap getBitmap(String img) {
+        public static Bitmap getBitmapFromURL(String src) {
+            try {
+                StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+
+                StrictMode.setThreadPolicy(policy);
+                URL url = new URL(src);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setDoInput(true);
+                connection.connect();
+                InputStream input = connection.getInputStream();
+                Bitmap myBitmap = BitmapFactory.decodeStream(input);
+                return myBitmap;
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
+            }
+        } // Author: silentnuke
+
 
 }
+
+
