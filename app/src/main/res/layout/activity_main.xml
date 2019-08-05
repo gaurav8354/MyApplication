@@ -87,15 +87,35 @@
         android:layout_height="0dp"
         android:layout_weight="0.5"
         />
-<TextView
-    android:layout_width="match_parent"
-    android:layout_height="0dp"
-    android:layout_weight="1"
-    android:text="No account yet ? Create One"
-    android:gravity="center"
-    android:id="@+id/TextView_register"
-    android:clickable="true"
-    android:textColor="#ffffff"
-    android:textColorHint="#ffffff"
-    />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:weightSum="5"
+        >
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:text="No account yet ? Create One"
+            android:gravity="center"
+            android:id="@+id/TextView_register"
+            android:clickable="true"
+            android:textColor="#ffffff"
+            android:textColorHint="#ffffff"
+            />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:text="Skip Sign In"
+            android:paddingRight="30dp"
+android:id="@+id/tv_skip_signin"
+            android:clickable="true"
+            android:textColor="#Ffffff"
+            android:textColorHint="#ffffff"
+            android:gravity="start|center"
+            />
+    </LinearLayout>
+
 </LinearLayout>

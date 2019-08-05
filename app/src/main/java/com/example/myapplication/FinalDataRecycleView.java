@@ -9,8 +9,11 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.StrictMode;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
@@ -29,6 +32,8 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.FutureTarget;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.example.myapplication.Database.SqlHelper;
 import com.example.myapplication.Notification.NotificationChannelManager;
 
@@ -41,19 +46,43 @@ import java.util.concurrent.ExecutionException;
 public class FinalDataRecycleView extends AppCompatActivity {
     Intent i;
     TextView tv_dis, tv_grow, tv_water, tv_id, tv_name;
+    boolean check=false;
     ImageView imageView,iv_star_blank;
     String name,pid,disc,imageurl;
     int gnum,wnum;
     Bitmap bitmap1;
 
     NotificationManagerCompat notificationCompat;
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        Log.d("12345","on intent");
+        if(!intent.getStringExtra("id").equals(pid))
+        {
+            notificationCompat=NotificationManagerCompat.from(this);
+            // Log.d("1234","oncreate called ");
+            getSupportActionBar().hide();
+            changeStatusBarColor("#FFFFFF");
+            status_icon_color();
+
+            i = intent;
+            idsetter();
+            favDataCheck();
+            setData();
+
+        }
+
+        super.onNewIntent(intent);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_final_data_recycle_view);
+        Log.d("12345","on create");
 
         notificationCompat=NotificationManagerCompat.from(this);
-    Log.d("1234","oncreate called ");
+        // Log.d("1234","oncreate called ");
         getSupportActionBar().hide();
         changeStatusBarColor("#FFFFFF");
         status_icon_color();
@@ -62,8 +91,14 @@ public class FinalDataRecycleView extends AppCompatActivity {
         idsetter();
         favDataCheck();
         setData();
-        markImportantSata();
 
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        markImportantSata();
     }
 
     private void favDataCheck() {
@@ -167,10 +202,24 @@ public class FinalDataRecycleView extends AppCompatActivity {
         } else {
             tv_dis.setText(Html.fromHtml(str));
         }
-        tv_grow.setText(tv_grow.getText().toString() + " " + i.getIntExtra("g", 0));
-        tv_water.setText(tv_water.getText().toString() + " : " + i.getIntExtra("w", 0));
+        tv_grow.setText("GrowZoneNumber :"+ " " + i.getIntExtra("g", 0));
+        tv_water.setText("wateringInterval" + " : " + i.getIntExtra("w", 0));
         tv_name.setText(i.getStringExtra("name"));
-        Glide.with(this).load(i.getStringExtra("image")).into(imageView);
+       // Glide.with(this).load(i.getStringExtra("image")).into(imageView);
+        Glide.with(this)
+                .asBitmap()
+                .load(i.getStringExtra("image"))
+                .into(new CustomTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                        imageView.setImageBitmap(resource);
+                        bitmap1=resource;
+                    }
+
+                    @Override
+                    public void onLoadCleared(@Nullable Drawable placeholder) {
+                    }
+                });
     }
 
     private void changeStatusBarColor(String color) {
@@ -223,21 +272,30 @@ public class FinalDataRecycleView extends AppCompatActivity {
 //            } catch (InterruptedException e) {
 //                e.printStackTrace();
 //            }
-        Bitmap theBitmap=getBitmapFromURL(img);
-        Intent resultIntent =new Intent(this,FinalDataRecycleView.class);
+//        Bitmap theBitmap=getBitmapFromURL(img);
+        Intent resultIntent = getIntent();
         resultIntent.putExtra("name",name);
         resultIntent.putExtra("dis",disc);
         resultIntent.putExtra("image",imageurl);
         resultIntent.putExtra("id",pid);
         resultIntent.putExtra("w",wnum);
         resultIntent.putExtra("g",gnum);
-        TaskStackBuilder stackBuilder=TaskStackBuilder.create(this);
-        stackBuilder.addNextIntentWithParentStack(resultIntent);
-        PendingIntent pendingIntent=stackBuilder.getPendingIntent(0,PendingIntent.FLAG_UPDATE_CURRENT);
+//        TaskStackBuilder stackBuilder=TaskStackBuilder.create(this);
+//        stackBuilder.addNextIntentWithParentStack(resultIntent);
+        Intent notifyIntent = getIntent();
+// Set the Activity to start in a new, empty task
+
+
+// Create the PendingIntent
+        PendingIntent pendingIntent = PendingIntent.getActivity(
+                this, 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT
+        );
+
+//        PendingIntent pendingIntent=stackBuilder.getPendingIntent(0,PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, NotificationChannelManager.CHANNEL_1)
-                    .setAutoCancel(true).setStyle(new NotificationCompat.BigPictureStyle().bigPicture(theBitmap).setSummaryText(""))
-                    .setContentTitle(msg).setSmallIcon(R.drawable.smilepng).setContentIntent(pendingIntent)
+                    .setAutoCancel(true).setStyle(new NotificationCompat.BigPictureStyle().bigPicture(bitmap1).setSummaryText(""))
+                    .setContentTitle(msg).setSmallIcon(R.drawable.ic_touch_app_black_24dp).setContentIntent(pendingIntent)
                     .setContentText(discription).setColor(Color.BLACK)
                     .setPriority(NotificationCompat.PRIORITY_DEFAULT);
                     notificationCompat.notify(2,builder.build());
@@ -246,25 +304,29 @@ public class FinalDataRecycleView extends AppCompatActivity {
         }
 
     //private Bitmap getBitmap(String img) {
-        public static Bitmap getBitmapFromURL(String src) {
-            try {
-                StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+//        public static Bitmap getBitmapFromURL(String src) {
+//            try {
+//                StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+//
+//                StrictMode.setThreadPolicy(policy);
+//                URL url = new URL(src);
+//                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+//                connection.setDoInput(true);
+//                connection.connect();
+//                InputStream input = connection.getInputStream();
+//                Bitmap myBitmap = BitmapFactory.decodeStream(input);
+//                return myBitmap;
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//                return null;
+//            }
+//        } // Author: silentnuke
 
-                StrictMode.setThreadPolicy(policy);
-                URL url = new URL(src);
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                connection.setDoInput(true);
-                connection.connect();
-                InputStream input = connection.getInputStream();
-                Bitmap myBitmap = BitmapFactory.decodeStream(input);
-                return myBitmap;
-            } catch (IOException e) {
-                e.printStackTrace();
-                return null;
-            }
-        } // Author: silentnuke
-
-
+    @Override
+    public void onBackPressed() {
+        check=true;
+        super.onBackPressed();
+    }
 }
 
 

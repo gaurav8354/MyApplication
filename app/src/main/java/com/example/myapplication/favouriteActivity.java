@@ -46,4 +46,25 @@ public class favouriteActivity extends AppCompatActivity {
         adapter.notifyDataSetChanged();
         recyclerView.setAdapter(adapter);
     }
+
+    @Override
+    protected void onRestart() {
+        recyclerView=findViewById(R.id.list_data_fav_recycleview);
+        SqlHelper sqlHelper=new SqlHelper(getApplicationContext());
+        Cursor cursor=sqlHelper.showAllFavData();
+        ArrayList<PojoJson> list1=new ArrayList<>();
+        while(cursor.moveToNext()!=false)
+        {
+            PojoJson pojoJson=new PojoJson();
+            pojoJson.setDescription(cursor.getString(2));
+            pojoJson.setPlantId(cursor.getString(0));
+            pojoJson.setName(cursor.getString(1));
+            pojoJson.setImageUrl(cursor.getString(3));
+            pojoJson.setGrowZoneNumber(cursor.getInt(4));
+            pojoJson.setWateringInterval(cursor.getInt(5));
+            list1.add(pojoJson);
+        }
+        recycleviewload(list1);
+        super.onRestart();
+    }
 }

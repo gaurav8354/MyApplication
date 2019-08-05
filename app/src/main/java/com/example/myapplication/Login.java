@@ -22,7 +22,7 @@ public class Login extends AppCompatActivity {
 Button login;
 String uname,password;
 EditText user,pass;
-TextView register,logo;
+TextView register,logo,skip;
 
     ArrayList<ArrayListLoad> ar=new ArrayList<ArrayListLoad>();
     @Override
@@ -82,6 +82,7 @@ TextView register,logo;
         pass=findViewById(R.id.edittext_password);
         register=findViewById(R.id.TextView_register);
         logo=findViewById(R.id.textview_logo);
+        skip=findViewById(R.id.tv_skip_signin);
     }
 
     private void listner() {
@@ -122,6 +123,14 @@ TextView register,logo;
             @Override
             public void onClick(View view) {
                 Intent i=new Intent(Login.this,Registration.class);
+                startActivity(i);
+            }
+        });
+        skip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent i=new Intent(Login.this,JsonDataMenu.class);
                 startActivity(i);
             }
         });
