@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS"/>
 
     <application
         android:allowBackup="true"
@@ -14,14 +15,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".favouriteActivity"
+        <activity android:name=".FavouriteActivity"
 
             ></activity>
-        <activity android:name=".FinalDataRecycleView"
+        <activity android:name=".RecycleViewInDataDetail"
             android:launchMode="singleTop"
             />
-        <activity android:name=".JsonDataMenu" />
-        <activity android:name=".ListData.ListDataView" />
+        <activity android:name=".RecycleViewList.JsonDataMenu" />
+        <activity android:name=".ListDataForUserLogin.ListDataView" />
         <activity android:name=".Registration" />
         <activity android:name=".Login">
             <intent-filter>

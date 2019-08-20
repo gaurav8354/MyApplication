@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.myapplication.RecycleViewList;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -16,10 +16,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.myapplication.Json.JsonData;
+import com.example.myapplication.FavouriteActivity;
 import com.example.myapplication.Json.PojoJson;
 import com.example.myapplication.R;
-import com.example.myapplication.RecycleViewSubList.AdapterSubMenu;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
@@ -28,16 +27,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONStringer;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class JsonDataMenu extends AppCompatActivity {
@@ -45,7 +41,7 @@ public class JsonDataMenu extends AppCompatActivity {
     Handler h=new Handler();
      Runnable runnable;
     ArrayList<PojoJson> arrayList= new ArrayList<PojoJson>();
-    boolean vollyresponsecheck=false;
+ //   boolean vollyresponsecheck=false;
     public RequestQueue requestQueue;
     ProgressDialog progress;
     String rp="";
@@ -57,7 +53,7 @@ public class JsonDataMenu extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_json_data_menu);
-//        actionbarhider();
+
         changeStatusBarColor("#FFFFFF");
         status_icon_color();
         idSetter();
@@ -71,9 +67,9 @@ public class JsonDataMenu extends AppCompatActivity {
 
     }
 
-    private void actionbarhider() {
-        getSupportActionBar().hide();
-    }
+//    private void actionbarhider() {
+//        getSupportActionBar().hide();
+//    }
 
     private void parseJson() {
         String url="https://api.myjson.com/bins/1dqeqd";
@@ -81,23 +77,15 @@ public class JsonDataMenu extends AppCompatActivity {
             @Override
             public void onResponse(JSONObject response) {
 
-                Log.d("jsonzzzz",response.toString());
-
-
-
-              //  Toast.makeText(JsonDataMenu.this, "zz", Toast.LENGTH_SHORT).show();
-
+                Log.d("json",response.toString());
                 try {
                      jsonArray=response.getJSONArray("jsondata");
                      JSONObject tmp=jsonArray.getJSONObject(0);
                      rp=tmp.getString("description");
 
-                   // Log.d("array",jsonArray.length()+"");
                     for(int i=0;i<jsonArray.length();++i)
                     {
-
                         JSONObject obj=jsonArray.getJSONObject(i);
-                       // Log.d("abcd",obj.getString("plantId"));
                         PojoJson p=new PojoJson();
                         p.setImageUrl(obj.getString("imageUrl"));
                         p.setDescription(obj.getString("description"));
@@ -108,8 +96,6 @@ public class JsonDataMenu extends AppCompatActivity {
                         arrayList.add(p);
                         Log.d("abcd",arrayList.get(i).getGrowZoneNumber()+"");
                     }
-                   // Log.d("jsondata",obj.getString("plantId"));
-                   // test();
                     dly();
 
                 } catch (JSONException e) {
@@ -135,7 +121,7 @@ public class JsonDataMenu extends AppCompatActivity {
                 /* Create an Intent that will start the Menu-Activity. */
                 progress.cancel();
 
-                test();
+                setRecycleView();
 
 
             }
@@ -143,7 +129,7 @@ public class JsonDataMenu extends AppCompatActivity {
     }
 
 
-    private void test() {
+    private void setRecycleView() {
         Log.d("array1",arrayList.get(3).getImageUrl()+"");
         Log.d("array1",arrayList.get(3).getDescription());
         layoutManager =new LinearLayoutManager(this);
@@ -160,10 +146,10 @@ public class JsonDataMenu extends AppCompatActivity {
     }
 
 
-
-    private void chk(boolean vollyresponsecheck) {
-        h.removeCallbacks(runnable);
-    }
+//
+//    private void chk(boolean vollyresponsecheck) {
+//        h.removeCallbacks(runnable);
+//    }
     private void changeStatusBarColor(String color) {
         if (Build.VERSION.SDK_INT >= 21) {
             Window window = getWindow();
@@ -179,9 +165,6 @@ public class JsonDataMenu extends AppCompatActivity {
             if (true) {
                 decor.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
             } else {
-                // We want to change tint color to white again.
-                // You can also record the flags in advance so that you can turn UI back completely if
-                // you have set other flags before, such as translucent or full screen.
                 decor.setSystemUiVisibility(0);
             }
         }
@@ -189,11 +172,10 @@ public class JsonDataMenu extends AppCompatActivity {
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
         switch (item.getItemId()) {
             case R.id.action_view_fav:
                 Toast.makeText(this, "clicked", Toast.LENGTH_SHORT).show();
-                Intent i=new Intent(JsonDataMenu.this,favouriteActivity.class);
+                Intent i=new Intent(JsonDataMenu.this, FavouriteActivity.class);
                 startActivity(i);
 
             default:

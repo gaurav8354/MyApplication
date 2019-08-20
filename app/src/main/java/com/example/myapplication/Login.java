@@ -13,18 +13,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.myapplication.Database.SqlHelper;
-import com.example.myapplication.ListData.ArrayListLoad;
-import com.example.myapplication.ListData.ListDataView;
+import com.example.myapplication.ListDataForUserLogin.ArrayListLoad;
+import com.example.myapplication.RecycleViewList.JsonDataMenu;
 
 import java.util.ArrayList;
 
 public class Login extends AppCompatActivity {
-Button login;
-String uname,password;
-EditText user,pass;
+Button btLogin;
+EditText et_user, et_pass;
 TextView register,logo,skip;
-
-    ArrayList<ArrayListLoad> ar=new ArrayList<ArrayListLoad>();
+    ArrayList<ArrayListLoad> arrayList =new ArrayList<ArrayListLoad>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,7 +40,7 @@ TextView register,logo,skip;
         logo.setTypeface(custom_font);
     }
     public boolean data(String email,String password) {
-        StringBuffer sb=new StringBuffer();
+        StringBuffer buffer=new StringBuffer();
         boolean check=false;
         SqlHelper db=new SqlHelper(this);
         Cursor cursor=db.showAllData();
@@ -56,50 +54,49 @@ TextView register,logo,skip;
             int i=0;
             while(cursor.moveToNext())
             {
-
-                ar.add(new ArrayListLoad(cursor.getString(0),cursor.getString(2),cursor.getString(1),cursor.getString(3)));
+                arrayList.add(new ArrayListLoad(cursor.getString(0),cursor.getString(2),cursor.getString(1),cursor.getString(3)));
                 String str="";
-                str=str+cursor.getString(0)+":"+cursor.getString(1)+":"+cursor.getString(2);
+//                str=str+cursor.getString(0)+":"+cursor.getString(1)+":"+cursor.getString(2);
                // array[i]=str;
 
             }
 
-            for(int j=0;j<ar.size();++j)
+            for(int j = 0; j< arrayList.size(); ++j)
             {
-                if(ar.get(j).email.equals(email)&&ar.get(j).password.equals(password))
+                if(arrayList.get(j).email.equals(email)&& arrayList.get(j).password.equals(password))
                 {
                     check=true;
                     break;
                 }
-                Log.d("1234",ar.get(j).name+":"+ar.get(j).email+":"+ar.get(j).password+":"+ar.get(j).no);
+                Log.d("1234", arrayList.get(j).name+":"+ arrayList.get(j).email+":"+ arrayList.get(j).password+":"+ arrayList.get(j).no);
             }
         }
         return check;
     }
     private void idsetter() {
-        login=findViewById(R.id.button_login);
-        user=findViewById(R.id.edittext_username);
-        pass=findViewById(R.id.edittext_password);
+        btLogin =findViewById(R.id.button_login);
+        et_user =findViewById(R.id.edittext_username);
+        et_pass =findViewById(R.id.edittext_password);
         register=findViewById(R.id.TextView_register);
         logo=findViewById(R.id.textview_logo);
         skip=findViewById(R.id.tv_skip_signin);
     }
 
     private void listner() {
-        login.setOnClickListener(new View.OnClickListener() {
+        btLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 //                Intent i=new Intent(Login.this);
-                if(!user.getText().toString().isEmpty())
+                if(!et_user.getText().toString().isEmpty())
                 {
-                    if(!pass.getText().toString().isEmpty())
+                    if(!et_pass.getText().toString().isEmpty())
                     {
-                       if( data(user.getText().toString(),pass.getText().toString()))
+                       if( data(et_user.getText().toString(), et_pass.getText().toString()))
                        {
 //                           Intent i=new Intent(Login.this, ListDataView.class);
 //                           startActivity(i);
 
-                           Intent i=new Intent(Login.this,JsonDataMenu.class);
+                           Intent i=new Intent(Login.this, JsonDataMenu.class);
                            startActivity(i);
 
                        }
@@ -109,12 +106,12 @@ TextView register,logo,skip;
                     }
                     else
                     {
-                        pass.setError("please enter password");
+                        et_pass.setError("please enter password");
                     }
                 }
                 else
                 {
-                    user.setError("please enter email");
+                    et_user.setError("please enter et_email");
                 }
 
             }
@@ -129,7 +126,6 @@ TextView register,logo,skip;
         skip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 Intent i=new Intent(Login.this,JsonDataMenu.class);
                 startActivity(i);
             }

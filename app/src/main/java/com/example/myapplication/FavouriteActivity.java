@@ -8,10 +8,10 @@ import android.support.v7.widget.RecyclerView;
 
 import com.example.myapplication.Database.SqlHelper;
 import com.example.myapplication.Json.PojoJson;
-import com.example.myapplication.RecycleViewSubList.AdapterSubMenu;
+import com.example.myapplication.RecycleViewList.AdapterSubMenu;
 
 import java.util.ArrayList;
-public class favouriteActivity extends AppCompatActivity {
+public class FavouriteActivity extends AppCompatActivity {
     ArrayList<PojoJson> list=new ArrayList<>();
     RecyclerView recyclerView;
     RecyclerView.Adapter adapter;

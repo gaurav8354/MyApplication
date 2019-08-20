@@ -1,4 +1,4 @@
-package com.example.myapplication.RecycleViewSubList;
+package com.example.myapplication.RecycleViewList;
 
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;

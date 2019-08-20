@@ -1,13 +1,11 @@
-package com.example.myapplication.RecycleViewSubList;
+package com.example.myapplication.RecycleViewList;
 
 import android.content.Context;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.example.myapplication.FinalDataRecycleView;
+import com.example.myapplication.RecycleViewInDataDetail;
 import com.example.myapplication.Json.PojoJson;
-import com.example.myapplication.ListData.ArrayListLoad;
-import com.example.myapplication.ListData.RecycleViewAdapter;
 import com.example.myapplication.R;
 
 import java.util.ArrayList;
@@ -17,7 +15,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 public class AdapterSubMenu extends RecyclerView.Adapter<ViewHolderSubMenu> {
 
@@ -46,8 +43,7 @@ public class AdapterSubMenu extends RecyclerView.Adapter<ViewHolderSubMenu> {
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               // Toast.makeText(cxt, position+"", Toast.LENGTH_SHORT).show();
-                Intent i=new Intent(cxt, FinalDataRecycleView.class);
+                Intent i=new Intent(cxt, RecycleViewInDataDetail.class);
                 i.putExtra("name",ar.get(position).getName());
                 i.putExtra("dis",ar.get(position).getDescription());
                 i.putExtra("image",ar.get(position).getImageUrl());

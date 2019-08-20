@@ -1,12 +1,11 @@
-package com.example.myapplication.ListData;
+package com.example.myapplication.ListDataForUserLogin;
 import android.content.Context;
-import android.database.Cursor;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import com.example.myapplication.Database.SqlHelper;
+
 import com.example.myapplication.R;
 import java.util.ArrayList;
 public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewViewHolder>{
@@ -15,7 +14,6 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewViewHold
     Context mcx;
 
     public RecycleViewAdapter(Context context, ArrayList<ArrayListLoad> arrayListLoad) {
-       // this.layoutInflater = layoutInflater;
         this.ar=arrayListLoad;
         this.mcx=context;
     }
